@@ -12,7 +12,7 @@ os.environ.setdefault("OTEL_SDK_DISABLED", "true")
 
 def get_llm() -> CopilotLLM:
     """Return the only supported provider for the lab."""
-    return CopilotLLM(model=os.getenv("COPILOT_MODEL", "gpt-6-luna"))
+    return CopilotLLM(model=os.getenv("COPILOT_MODEL", "claude-sonnet-5.5"))
 
 
 llm = get_llm()

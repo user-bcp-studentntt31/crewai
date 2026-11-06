@@ -1058,6 +1058,16 @@ def main():
     print("\nVEREDICTO del Chapter (extracto):")
     print(chapter_text[-500:] if len(chapter_text) > 500 else chapter_text)
 
+    # ── Publicar en ai-labs (rama + commit + PR) ──────────────────────
+    ans = input("\n¿Publicar output/ en ../ai-labs (rama + commit + PR)? [s/n]: ").strip().lower()
+    if ans == "s":
+        from publish_ai_labs import publish
+        try:
+            pr_url = publish(feature["title"])
+            print(f"\n✅ Pull request creado: {pr_url}" if pr_url else "\nNo hubo cambios que publicar.")
+        except Exception as exc:
+            print(f"\n✗ No se pudo publicar en ai-labs:\n{exc}")
+
 
 if __name__ == "__main__":
     main()
