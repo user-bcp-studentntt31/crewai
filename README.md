@@ -3,7 +3,7 @@
 Los agentes parten con instrucciones básicas. Sigue [Mejora tu agente](MEJORA_TU_AGENTE.md) para completar el ejercicio y consultar resultados desde el portal.
 
 Base de trabajo del Lab 4, S1. Lee una funcionalidad del backlog mediante MCP Projects
-y genera una solución Quarkus 3.x y Angular 17 con seis agentes de CrewAI, o siete cuando el equipo activa Datos y persistencia.
+y genera una solución Quarkus 3.x y Angular 17 con cinco agentes de CrewAI, o seis cuando el equipo activa Datos y persistencia. AI Engineer implementa backend y frontend en una sola etapa.
 Cada agente tiene su definición y la tarea en un archivo propio.
 
 ## Editar tu agente
@@ -18,13 +18,12 @@ que necesita el flujo para guardar código y revisar resultados.
 Cada participante edita el archivo de su rol:
 
 - `agents/architect.py`
-- `agents/backend.py`
-- `agents/frontend.py`
+- `agents/ai_engineer.py`
 - `agents/testing.py`
 - `agents/security.py`
 - `agents/chapter.py`
 
-El orden es `architect → backend → frontend → testing → security → chapter`.
+El orden es `architect → ai-engineer → testing → security → chapter`.
 Chapter reemplaza al LT como revisor final. La aprobación humana se conserva entre etapas.
 Consulta [TEAM.md](TEAM.md) para crear el repo de tu equipo y repartir los archivos.
 
@@ -85,7 +84,7 @@ o `n` para rechazar y detener el flujo. El checkpoint permite retomar los pasos 
 Los artefactos se guardan en `output/`:
 
 - `specs/user_story.md`: especificación del arquitecto.
-- `specs/backend_spec.md` y `specs/frontend_spec.md`: implementaciones.
+- `specs/ai_engineer_spec.md`: implementación integrada de backend y frontend.
 - `specs/testing_report.md`: casos, tests y comandos. Los resultados quedan pendientes de ejecución humana.
 - `specs/security_report.md`: hallazgos y verificaciones de seguridad.
 - `specs/chapter_review.md`: revisión final del Chapter.
@@ -117,26 +116,26 @@ Revisa los comandos adicionales del informe de pruebas y registra sus resultados
 python tools/verify.py
 ```
 
-Los checks recorren los seis roles, verifican artefactos, contexto y reanudación.
+Los checks recorren ambos flujos, verifican artefactos, contexto y reanudación.
 Sustituyen las llamadas al modelo y a MCP para ejecutarse sin credenciales.
 La ejecución real de Copilot y MCP requiere el entorno del taller.
 
 Consulta [SOURCE.md](SOURCE.md) para ver el origen de esta copia.
 
-## Equipo de siete (solo CrewAI)
+## Datos y persistencia opcional
 
-El grupo de siete añade un responsable de **Datos y persistencia**, que edita
-únicamente `agents/data.py` y entrega su propio PR. Los equipos de seis mantienen
-sus seis roles. En `team.json`, solo el equipo de siete añade `"data": "usuario-real"`
+El equipo puede añadir un responsable de **Datos y persistencia**, que edita
+únicamente `agents/data.py` y entrega su propio PR. En `team.json`, añade `"data": "usuario-real"`
 dentro de `roles`, con un usuario distinto de los otros responsables.
 
-Antes de iniciar un flujo nuevo, el líder del equipo de siete configura
+Antes de iniciar un flujo nuevo, el líder configura
 `CREWAI_INCLUDE_DATA=true` en su `.env`. El orden será Arquitectura → Datos y
-persistencia → Backend → Frontend → Pruebas → Seguridad → Chapter. Cada etapa
+persistencia → AI Engineer → Pruebas → Seguridad → Chapter. Cada etapa
 mantiene aprobación, rechazo y reintento humanos. Datos produce `output/specs/data_spec.md`
-y propuestas SQL en `output/db/`; no ejecuta migraciones. Backend usa ese contrato
+y propuestas SQL en `output/db/`; no ejecuta migraciones. AI Engineer usa ese contrato
 y Chapter lo revisa. Los participantes mejoran las instrucciones iniciales de su agente.
 
-Por defecto la variable es `false`. Un checkpoint de seis etapas no se reutiliza
-en el flujo de siete ni viceversa: conserva la carpeta `output/` con otro nombre
-antes de cambiar el modo. No borres evidencia previa para cambiar de flujo.
+Por defecto la variable es `false`. Los checkpoints de los flujos con y sin Datos no
+son intercambiables. Tampoco se reanudan checkpoints anteriores con etapas separadas
+de Backend y Frontend: conserva la carpeta `output/` con otro nombre antes de iniciar
+el nuevo flujo. No borres evidencia previa para cambiar de flujo.

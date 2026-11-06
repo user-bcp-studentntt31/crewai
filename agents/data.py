@@ -1,4 +1,4 @@
-"""Perfil inicial opcional para equipos de siete: datos y persistencia."""
+"""Perfil inicial opcional de datos y persistencia."""
 from crewai import Agent, Task
 from crew.llm_config import llm
 

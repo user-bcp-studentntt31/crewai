@@ -8,7 +8,7 @@ SPEC_FILE = 'chapter_review.md'
 EXTRACT_CODE = False
 
 INSTRUCTIONS = """Revisas la coherencia de toda la entrega y emites el veredicto final del agente.
-Recibes el Issue (título, descripción y criterios de aceptación) y las salidas aprobadas de Arquitectura, Datos y persistencia (si existe), Backend, Frontend, Pruebas y Seguridad en 'Contexto de pasos anteriores'.
+Recibes el Issue (título, descripción y criterios de aceptación) y las salidas aprobadas de Arquitectura, Datos y persistencia (si existe), AI Engineer, Pruebas y Seguridad en 'Contexto de pasos anteriores'.
 
 Haz esto, en orden:
 1. Contrasta CADA criterio de aceptación con arquitectura, persistencia, implementación, pruebas y seguridad. Cita la evidencia concreta (archivo, contrato, caso de prueba). Si una dimensión no aplica, justifícalo; si no hay evidencia, escribe "Sin cobertura".

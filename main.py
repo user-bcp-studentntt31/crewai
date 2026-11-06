@@ -2,7 +2,7 @@
 
 Flujo:
   1. Conecta al MCP Projects → lista proyectos → elige proyecto → lista backlog → elige feature
-  2. Por cada agente (Arquitecto, Backend, Frontend, Pruebas, Seguridad, Chapter), corre un mini-Crew de un solo paso.
+  2. Por cada agente (Arquitecto, AI Engineer, Pruebas, Seguridad, Chapter), corre un mini-Crew de un solo paso.
   3. Tras cada paso muestra un preview y pide aprobación humana [s / n / r]:
        s = aprobar y continuar
        n = rechazar y abortar
@@ -16,8 +16,7 @@ Estructura generada en output/:
   .checkpoint.json        ← estado de cada paso
   specs/
     user_story.md
-    backend_spec.md
-    frontend_spec.md
+    ai_engineer_spec.md
     chapter_review.md
   backend-quarkus/src/main/java/pe/bcp/<feature>/...
   frontend-angular/src/app/<feature>/...
@@ -396,6 +395,7 @@ def ensure_scaffolding(output_dir: Path) -> None:
 # ── Rutas base ─────────────────────────────────────────────────────
 OUTPUT_DIR      = Path(__file__).parent / "output"
 CHECKPOINT_FILE = OUTPUT_DIR / ".checkpoint.json"
+WORKFLOW_VERSION = 2
 OUTPUT_DIR.mkdir(exist_ok=True)   # lo necesita save_checkpoint()
 # ensure_scaffolding() NO se llama aquí: escribiría en output/ con sólo importar
 # el módulo, antes del MCP, del feature elegido y del primer agente.
@@ -936,12 +936,17 @@ def main():
             print("Abortando. Cambia de feature o elimina output/.checkpoint.json para reiniciar.")
             raise SystemExit(0)
 
+    if steps_state and checkpoint.get("workflow_version") != WORKFLOW_VERSION:
+        print("El checkpoint pertenece a una versión anterior del flujo. Conserva output/ moviéndolo a otra carpeta antes de iniciar el flujo con AI Engineer.")
+        raise SystemExit(1)
+
     mode = "with-data" if with_data else "standard"
     previous_mode = checkpoint.get("workflow_mode", "standard")
     if steps_state and previous_mode != mode:
         print("El checkpoint pertenece a otro flujo. Conserva output/ moviéndolo a otra carpeta antes de cambiar CREWAI_INCLUDE_DATA.")
         raise SystemExit(1)
     checkpoint["workflow_mode"] = mode
+    checkpoint["workflow_version"] = WORKFLOW_VERSION
     checkpoint["feature_title"] = feature["title"]
 
     # ── Recuperar outputs aprobados del checkpoint ────────────────────
@@ -997,7 +1002,7 @@ def main():
             if ctx_note:
                 task.description = task.description + ctx_note
 
-            if with_data and step_key == "backend":
+            if with_data and step_key == "ai-engineer":
                 task.description += "\nUsa el diseño de persistencia aprobado de Datos y persistencia. No regeneres sus archivos SQL; implementa el acceso a datos según ese contrato."
             if with_data and step_key == "chapter":
                 task.description += "\nRevisa también el modelo, migración y compatibilidad del contrato aprobado de Datos y persistencia con backend."
